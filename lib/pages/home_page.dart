@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert'; //we use it to parse json- decode json
 
 class HomePage extends StatefulWidget {
+  static const String routeName = "/home";
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -38,12 +39,19 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         title: Text("Awesome App"),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                Navigator.pop(context);
+              })
+        ],
       ),
       body: data != null
           ? ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
-                  title:Text(data[index]["title"]),
+                  title: Text(data[index]["title"]),
                   subtitle: Text("ID: ${data[index]["id"]}"),
                   leading: Image.network(data[index]["url"]),
                 );

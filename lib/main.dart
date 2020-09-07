@@ -1,4 +1,5 @@
 import 'package:awesome_app/pages/home_page.dart';
+import 'package:awesome_app/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,13 +11,20 @@ void main() {
 //stateless widget is soomething that is not supposed to change
 
 class MyApp extends StatelessWidget {
+   
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      debugShowCheckedModeBanner: false, //removes the debug mode
+      home:LoginPage(),
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      routes: {
+        LoginPage.routeName : (context ) =>LoginPage(),
+        HomePage.routeName : (context ) =>HomePage(),
+
+      },
     );
   }
 }
