@@ -1,6 +1,8 @@
 import 'package:awesome_app/drawer.dart';
-import 'package:awesome_app/name_card_widget.dart';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; //we use it to parse json- decode json
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,8 +10,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var myText = "Change my name !!!";
-  TextEditingController _nameController = TextEditingController();
+  /* var myText = "Change my name !!!";
+  TextEditingController _nameController = TextEditingController(); */
+
+  var url = "https://jsonplaceholder.typicode.com/photos";
+  var data;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  //defining the fetchData method
+  fetchData() async {
+    var res = await http.get(url);
+    //print(res.body);
+    data = jsonDecode(res.body);
+    //print(data);
+    //we use the set state to change the UI
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,21 +39,25 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Awesome App"),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: NameCardWidget(myText: myText, nameController: _nameController),
-          ),
-        ),
-      ),
+      body: data != null
+          ? ListView.builder(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title:Text(data[index]["title"]),
+                  subtitle: Text("ID: ${data[index]["id"]}"),
+                  leading: Image.network(data[index]["url"]),
+                );
+              },
+              itemCount: data.length,
+            )
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
       drawer: MyDrawer(), // that ka small menu bar on the top left
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          myText = _nameController.text;
-          setState(() {
-            
-          });
+          /*   myText = _nameController.text;
+          setState(() {}); */
         },
         child: Icon(Icons.send),
         // mini: true, //mkes the floating button smaller
